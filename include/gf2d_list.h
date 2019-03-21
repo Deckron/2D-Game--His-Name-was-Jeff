@@ -18,14 +18,14 @@ typedef struct
 @brief allocated a new empty list
 @return Null on memory error or a new empty list
 ***/
-List gf2d_list_new();
+List *gf2d_list_new();
 
 /***
 @brief allocate a new empty list of size'count'
 @param count how any elements you wish to support in this list
 @return NULL on mem error or a new empty list
 ***/
-List gf2d_list_new_size(Uint32 count);
+List *gf2d_list_new_size(Uint32 count);
 
 /***
 @brief deletes a list that has been previously allocated
@@ -39,7 +39,7 @@ void gf2d_list_delete(List *list);
 @param n which element to look for
 @return NULL on error(such as if n> the element count) or the address of the data otherwise
 ***/
-void gf2d_list_get_nth(List *list, Uint32 n);
+void *gf2d_list_get_nth(List *list, Uint32 n);
 
 /***
 @brief add an element to the end of the list
@@ -48,7 +48,7 @@ void gf2d_list_get_nth(List *list, Uint32 n);
 @param data the data assigned to the list
 @return NULL on error or the list
 ***/
-List gf2d_list_append(List *list, void *data);
+List *gf2d_list_append(List *list, void *data);
 
 /***
 @brief insert a new element at the position provided
@@ -57,7 +57,7 @@ List gf2d_list_append(List *list, void *data);
 @param the location n that you want the data to go to
 return -1 on error, 0 otherwise
 ***/
-List gf2d_list_insert(List *list, void *data, Uint32 n);
+List *gf2d_list_insert(List *list, void *data, Uint32 n);
 
 /***
 @brief delete the element at the nth position in the array
@@ -65,7 +65,7 @@ List gf2d_list_insert(List *list, void *data, Uint32 n);
 @param the position of the data being deleted. this is no-op is the nth element is beyond the scope of the list
 @return -1 on error, 0 otherwise
 ***/
-List gf2d_list_delete_nth(List *list, Uint32 n);
+int gf2d_list_delete_nth(List *list, Uint32 n);
 
 /***
 @brief delete the item at the end of the list
@@ -73,7 +73,7 @@ List gf2d_list_delete_nth(List *list, Uint32 n);
 @param list the list to delete from
 @return -1 on error, 0 otherwise
 ***/
-List gf2d_list_delete_last(List *list);
+int gf2d_list_delete_last(List *list);
 
 /***
 @brief delete the first element in the list point to the addressof data
@@ -82,7 +82,7 @@ List gf2d_list_delete_last(List *list);
 @oaram data used to match against which element to delete
 @return -1 on error, 0 otherwise
 ***/
-List gf2d_list_delete_data(List *list, void *data);
+int gf2d_list_delete_data(List *list, void *data);
 
 /***
 @brief get the number of tracked elements in this list
@@ -97,7 +97,7 @@ Uint32 gf2d_list_get_count(List *list);
 @param fucntion a pointer to a func that will be called. Data will be set to the list data element, context will be the contextData provided
 @param contextData the data that will also be provided to the function pointer for each element
 ***/
-void gf2d_list_foreach(List *list, void(*function)(void *data, void *context), *contextData);
+void gf2d_list_foreach(List *list, void(*function)(void *data, void *context),void *contextData);
 
 /***
 @brief add the lements from b into a 
@@ -107,7 +107,7 @@ void gf2d_list_foreach(List *list, void(*function)(void *data, void *context), *
 @param b the list that will provide the new items for a
 @return NULL on failure, a pointer to the new list otherwise
 ***/
-List gf2d_list_concat(List *a, List *b);
+List *gf2d_list_concat(List *a, List *b);
 
 /***
 @brief same as gf2d_list_concat but b is freed when complete
@@ -116,6 +116,6 @@ List gf2d_list_concat(List *a, List *b);
 @param b the list to provide the items. This list is freed, but the data referenced is now referenced by a
 @return null on fail, a pointer to the new list otherwise
 ***/
-List gf2d_list_concat_free(List *a, List *b);
+List *gf2d_list_concat_free(List *a, List *b);
 
 #endif

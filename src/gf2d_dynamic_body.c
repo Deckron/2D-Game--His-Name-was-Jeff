@@ -128,7 +128,7 @@ DynamicBody *gf2d_dynamic_body_new()
 void gf2d_dynamic_body_clear_collisions(DynamicBody *db)
 {
 	if (!db)return;
-	gf2d_collision_list_clear(db->collisionList);
+	gf2d_collision_list_free(db->collisionList);
 }
 
 void gf2d_dynamic_body_free(DynamicBody *db)

@@ -4,6 +4,7 @@
 #include "gf2d_shape.h"
 #include "gf2d_list.h"
 #include "gf2d_text.h"
+#include "gf2d_space.h"
 #include "gf2d_body.h"
 
 #define ALL_LAYERS 0xffffffff
@@ -51,6 +52,27 @@ void gf2d_collision_free(Collision *collision);
  * @param list must contain a list of collisions
  */
 void gf2d_collision_list_free(List *list);
+
+
+/**
+ * @brief check if the provided shape intersects anything in the space
+ * @param space the space to test
+ * @param shape the shape to check with
+ * @param filter the filter to use for testing
+ * @return a List of collisions data for the test
+ */
+List *gf2d_collision_check_space_shape(Space *space, Shape shape, CollisionFilter filter);
+
+/**
+ * @brief perform a linear trace through the space
+ * @param space the space to test
+ * @param start the starting position of the trace
+ * @param end the end point of the trace
+ * @param filter the filter to apply to the test
+ * @return a collision structure.  Note the timeStep will be the percentage of the trace that was completed before a collision was triggered
+ */
+Collision gf2d_collision_trace_space(Space *space, Vector2D start, Vector2D end, CollisionFilter filter);
+
 
 
 #endif

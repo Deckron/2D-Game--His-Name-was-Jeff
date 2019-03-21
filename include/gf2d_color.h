@@ -42,7 +42,7 @@ Color gf2d_color(float r, float g, float b, float a);
  * @param a alpha value 0 - 255
  * @returns a newly set color
  */
-Color gf2d_color8(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+Color gf2d_Color8(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 /**
  * @brief create and return a color from floating point RGBA values
  * @param h hue value 0 - 1
@@ -106,7 +106,7 @@ SDL_Color gf2d_color_to_sdl(Color color);
  * @param vector the vector to convert
  * @return a new color in the format CT_HSL
  */
-Color gf2d_color_from_vector4(Vector4D vector);
+Color gf2d_Color_from_vector4(Vector4D vector);
 
 /**
  * @brief convert a color to a vector where x = r, y = g, z = b, w = a
