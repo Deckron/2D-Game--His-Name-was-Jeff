@@ -1,6 +1,9 @@
 #include "tilemap.h"
 #include "simple_logger.h"
 #include "gf2d_draw.h"
+#include "player.h"
+#include "gf2d_graphics.h"
+#include "gf2d_collision.h"
 #include <stdio.h>
 #include <string.h>
 

@@ -6,6 +6,8 @@
 #include "gf2d_sprite.h"
 #include "gf2d_text.h"
 #include "simple_logger.h"
+#include "gf2d_shape.h"
+#include "gf2d_collision.h"
 typedef struct entity
 {
 	int inUse;
@@ -14,6 +16,9 @@ typedef struct entity
 	Vector2D flip;
 	Vector2D velocity;
 	Sprite *sprite;
+	Shape shape;
+	Shape hitbox;
+	Body body;
 	float frame;
 	int will_to_live;
 	int frame_limit;

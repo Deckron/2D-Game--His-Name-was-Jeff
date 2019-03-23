@@ -3,8 +3,13 @@
 #include "gf2d_sprite.h"
 #include "simple_logger.h"
 #include "entity.h"
+#include "tilemap.h"
 #include "gf2d_vector.h"
 #include "player.h"
+#include "gf2d_collision.h"
+//#include "gf2d_space.h"
+
+
 
 
 
@@ -21,7 +26,13 @@ int main(int argc, char * argv[])
     float mf = 0;
     Sprite *mouse;
 	Entity *ent;
+	TileMap *map;
     Vector4D mouseColor = {255,100,255,200};
+	Space *space= NULL;
+	
+
+	//space = gf2d_space_new_full(10, gf2d_Rectangle(0, 0, 1200, 720), 10.0f, vector2d(0,0), 0.0f, 0.1f);
+	static Vector2D path[2];
     
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -43,6 +54,12 @@ int main(int argc, char * argv[])
     sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
 	player = player_new(vector2d(0, 0), player);
+	map = tilemap_load("levels/tilemap.map");
+	vector2d_copy(path[0], map->start);
+	vector2d_copy(path[1], map->end);
+	space = gf2d_space_new_full(10, gf2d_Rectangle(0, 0, 1200, 720), 10.0f, vector2d(0, 4), 1.0f, 0.3f);
+	gf2d_space_add_static_shape(space, gf2d_shape_Rectangle(0, 100, 550, 30));
+	gf2d_space_add_body(space, &player->body);
 	slog("init");
 	//player = gf2d_sprite_load_all("images/space_bug.png", 128, 128, 16);
 
@@ -79,9 +96,14 @@ int main(int argc, char * argv[])
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
 			draw_ent(player);
 			update_ent(player);
+			//player_update(player, space);
+			tilemap_draw(map, vector2d(86, 24));
+			//tilemap_draw_path(path, 2, map, vector2d(86, 24));
 
-			slog("check here");
-
+			//slog("check here");
+			gf2d_space_draw(space, vector2d(0, 0));
+			
+		
 
 
 			

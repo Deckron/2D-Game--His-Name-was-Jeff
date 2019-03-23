@@ -33,7 +33,7 @@ typedef struct
  * @param a alpha value 0 - 1
  * @returns a newly set color
  */
-Color gf2d_color(float r, float g, float b, float a);
+Color gf2d_Color(float r, float g, float b, float a);
 /**
  * @brief create and return a color from 8 bit integer RGBA values
  * @param r red value 0 - 255

@@ -114,7 +114,7 @@ void draw_ent(Entity *self)
 		NULL,//Flip
 		NULL,//colorShift
 		self->frame);//frame
-	slog("drawn");
+		//slog("drawn");
 
 }
 
@@ -125,6 +125,6 @@ void update_ent(Entity *self)
 	if (self->frame > self->frame_limit)self->frame = 0;
 	vector2d_add(self->position, self->position, self->velocity);
 	if (self->update)self->update(self);
-	slog("updated");
+	//slog("updated");
 
 }
