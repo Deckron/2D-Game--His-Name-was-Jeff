@@ -7,6 +7,7 @@
 #include "gf2d_vector.h"
 #include "player.h"
 #include "gf2d_collision.h"
+#include "floater.h"
 //#include "gf2d_space.h"
 
 
@@ -20,6 +21,7 @@ int main(int argc, char * argv[])
     const Uint8 * keys;
     Sprite *sprite;
 	Entity *player = NULL;
+	Entity *floater = NULL;
 	slog("declared");
     
     int mx,my;
@@ -54,15 +56,17 @@ int main(int argc, char * argv[])
     sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
 	player = player_new(vector2d(0, 0), player);
+	floater = floater_new(vector2d(300, 0), floater);
 	map = tilemap_load("levels/tilemap.map");
 	vector2d_copy(path[0], map->start);
 	vector2d_copy(path[1], map->end);
 	space = gf2d_space_new_full(10, gf2d_Rectangle(0, 0, 1200, 720), 10.0f, vector2d(0, 4), 1.0f, 0.3f);
 	gf2d_space_add_static_shape(space, gf2d_shape_Rectangle(0, 100, 550, 30));
-	gf2d_space_add_body(space, &player->body);
+	//gf2d_space_add_body(space, &player->body);
+	//gf2d_space_add_body(space, &floater->body);
 	slog("init");
 	//player = gf2d_sprite_load_all("images/space_bug.png", 128, 128, 16);
-
+	//those two lines go into both floater and player
 	//create entity(player)
 	/*
 	player = player_new();
@@ -95,16 +99,18 @@ int main(int argc, char * argv[])
             //backgrounds drawn first
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
 			draw_ent(player);
-			update_ent(player);
-			//player_update(player, space);
-			tilemap_draw(map, vector2d(86, 24));
+			draw_ent(floater);
+			//update_ent(player);
+			player_update(player, space);
+			floater_update(floater, space, player);
+			//tilemap_draw(map, vector2d(86, 24));
 			//tilemap_draw_path(path, 2, map, vector2d(86, 24));
 
 			//slog("check here");
 			gf2d_space_draw(space, vector2d(0, 0));
 			
 		
-
+			
 
 			
 			
