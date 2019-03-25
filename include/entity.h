@@ -18,6 +18,7 @@ typedef struct entity
 	Sprite *sprite;
 	Shape shape;
 	Shape hitbox;
+	Shape hitbox1;
 	Body body;
 	float frame;
 	int will_to_live;

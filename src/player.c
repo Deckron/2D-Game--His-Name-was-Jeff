@@ -109,8 +109,8 @@ void player_update(Entity *self, Space *space)
 		if (frameIncr > 18.0f)
 			frameIncr = 10.0f;
 	}
-	if (keys[SDL_SCANCODE_A])self->position.x -= 1;
-	if (keys[SDL_SCANCODE_D])self->position.x += 1;
+	if (keys[SDL_SCANCODE_A])self->position.x -= 3;
+	if (keys[SDL_SCANCODE_D])self->position.x += 3;
 	if (keys[SDL_SCANCODE_D])
 	{
 		
