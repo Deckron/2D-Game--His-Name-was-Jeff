@@ -59,10 +59,11 @@ Entity *player_new(Vector2D position)
 	entity->frame = 27;
 	entity->update = player_update;
 	entity->hitbox = gf2d_shape_Rectangle(position.x, position.y, 27, 35);
-	gf2d_body_set(&entity->body, entity, PLAYER_LAYER,1,vector2d(position.x,position.y), vector2d(entity->velocity.x,entity->velocity.y),1.0f,0.0f,0.0f,&entity->hitbox,NULL,player_bodyTouch,player_worldTouch);
+	entity->hitbox.id = 1;//player's hitbox id
+	gf2d_body_set(&entity->body, "entity", PLAYER_LAYER,1,vector2d(position.x,position.y), vector2d(entity->velocity.x,entity->velocity.y),1.0f,0.0f,0.0f,&entity->hitbox,NULL,player_bodyTouch,player_worldTouch);
 	return entity;
 }
-void player_update(Entity *self, Space *space)
+void player_update(Entity *self, Space *space, float playerHealth)
 {
 	const Uint8 *keys;
 	timerInc += 0.1f;
@@ -75,29 +76,23 @@ void player_update(Entity *self, Space *space)
 	
 	self->frame = 27;
 	//self->velocity = vector2d(0, 2);
+	ClipFilter filter; filter.layer = 1; filter.team = 1;
+	Collision staticHit;
+	gf2d_space_body_collision_test_filter(space, self->hitbox, &staticHit, filter);
+
 	
-	/*
-	ClipFilter ClipFil;
-	ClipFil.worldclip = 1;
-	ClipFil.cliplayer = 1;
-	ClipFil.touchlayer = 1;
-	ClipFil.team = 1;*/
-	//frameIncr += 0.1f;
-	//if (frameIncr > 36.0f)
-	//{
-	//	frameIncr = 0.0f;
-	//}
 	
-	Collision staticHit = gf2d_space_shape_test(space, self->hitbox);
+	Collision staticHit_b = gf2d_space_shape_test(space, self->hitbox);
 	self->velocity = vector2d(0, 3);
-	if (staticHit.collided >= 1)
+	if (staticHit_b.collided >= 1)
 	{
 		self->velocity = vector2d(0, 0);
 		slog("COLLISION");
+		playerHealth -= 1;
 	}
-	if (staticHit.collided = 0)
+	else if (staticHit.collided = 0)
 	{
-		self->velocity= vector2d(0, 6);
+		self->velocity= vector2d(0, 2);
 	}
 	self->frame = (int)frameIncr;
 	keys = SDL_GetKeyboardState(NULL);

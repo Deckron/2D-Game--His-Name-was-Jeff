@@ -11,6 +11,7 @@
 #include "gobl.h"
 #include "guld.h"
 #include "gui.h"
+#include "save_load.h"
 //#include "gf2d_space.h"
 
 
@@ -30,6 +31,8 @@ int main(int argc, char * argv[])
 	Entity *mage = NULL;
 	Entity *bug = NULL;
 	Entity *projectile = NULL;
+	Save *save;
+	read_file(&save, player);
 	slog("declared");
 	float playerHealth = 20;
     int mx,my;
@@ -67,8 +70,8 @@ int main(int argc, char * argv[])
 	player = player_new(vector2d(0, 0), player);
 	floater = floater_new(vector2d(300, 0), floater);
 	gobl = gobl_new(vector2d(300, 0), gobl);
-	guld = guld_new(vector2d(300, 450), guld);
-	mage = mage_new(vector2d(300, 450), mage);
+	guld = guld_new(vector2d(300, 300), guld);
+	mage = mage_new(vector2d(350, 430), mage);
 	bug = bug_new(vector2d(300, 400), bug);
 	projectile = projectile_new(vector2d(mage->position.x, mage->position.y), projectile);
 	map = tilemap_load("levels/tilemap.map");
@@ -113,6 +116,7 @@ int main(int argc, char * argv[])
         // all drawing should happen betweem clear_screen and next_frame
             //backgrounds drawn first
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
+			entity_draw_all();
 			draw_ent(player);
 			draw_ent(floater);
 			draw_ent(gobl);
@@ -120,19 +124,28 @@ int main(int argc, char * argv[])
 			draw_ent(mage);
 			draw_ent(bug);
 			draw_ent(projectile);
-			//update_ent(player);
-			player_update(player, space);
+			
+			player_update(player, space, playerHealth);
 			floater_update(floater, space, player);
 			gobl_update(gobl, space, player);
 			guld_update(guld, space, player);
-			mage_update(mage, space, player);
+			mage_update(mage, space, player, projectile);
 			bug_update(bug, space, player);
 			projectile_update(projectile, space, player);
+			//entity_update_all(space, player);
 			//tilemap_draw(map, vector2d(86, 24));
 			//tilemap_draw_path(path, 2, map, vector2d(86, 24));
-			//gui_draw_hud();
+			gui_draw_hud();
 			//slog("check here");
 			gf2d_space_draw(space, vector2d(0, 0));
+			//if (keys[SDL_SCANCODE_S])
+			//{
+				//save_file(&save, player);
+		//	}
+		//	if (keys[SDL_SCANCODE_L])
+		//	{
+				//oad_file(&save, player);
+		//	}
 			
 		
 			
@@ -156,7 +169,7 @@ int main(int argc, char * argv[])
         slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }
     slog("---==== END ====---");
-   // Level2();
+    Level2();
 	return 0;
 	
 }
@@ -174,7 +187,7 @@ int Level2()
 	Entity *player = NULL;
 	Entity *floater = NULL;
 	slog("declared");
-
+	float playerHealth = 0;
 	int mx, my;
 	float mf = 0;
 	Sprite *mouse;
@@ -213,6 +226,8 @@ int Level2()
 	vector2d_copy(path[1], map->end);
 	space = gf2d_space_new_full(10, gf2d_Rectangle(0, 0, 1200, 720), 10.0f, vector2d(0, 4), 1.0f, 0.3f);
 	gf2d_space_add_static_shape(space, gf2d_shape_Rectangle(0, 200, 550, 30));
+	gui_setup_hud();
+	gui_set_health(playerHealth);
 	//gf2d_space_add_body(space, &player->body);
 	//gf2d_space_add_body(space, &floater->body);
 	slog("init");
@@ -252,8 +267,9 @@ int Level2()
 		draw_ent(player);
 		draw_ent(floater);
 		//update_ent(player);
-		player_update(player, space);
+		player_update(player, space, playerHealth);
 		floater_update(floater, space, player);
+		gui_draw_hud();
 		//tilemap_draw(map, vector2d(86, 24));
 		//tilemap_draw_path(path, 2, map, vector2d(86, 24));
 

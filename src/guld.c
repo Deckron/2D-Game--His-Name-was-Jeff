@@ -62,7 +62,8 @@ Entity *guld_new(Vector2D position)
 	entity->frame = 1;
 	entity->update = guld_update;
 	entity->hitbox = gf2d_shape_Rectangle(position.x, position.y, 27, 27);
-	gf2d_body_set(&entity->body, "entity", PLAYER_LAYER, 1, vector2d(position.x, position.y), vector2d(entity->velocity.x, entity->velocity.y), 1.0f, 0.0f, 0.0f, &entity->hitbox, NULL, guld_bodyTouch, guld_worldTouch);
+	gf2d_body_set(&entity->body, "entity", MONSTER_LAYER, 1, vector2d(position.x, position.y), vector2d(entity->velocity.x, entity->velocity.y), 1.0f, 0.0f, 0.0f, &entity->hitbox, NULL, guld_bodyTouch, guld_worldTouch);
+	//entity->enemy_update = guld_update;
 	return entity;
 }
 void guld_update(Entity *self, Space *space, Entity *player)
@@ -75,15 +76,19 @@ void guld_update(Entity *self, Space *space, Entity *player)
 	{
 		frameIncr = 0.0f;
 	}
+	ClipFilter filter; filter.layer = 2; filter.team = 2;
+	Collision staticHit;
+	gf2d_space_body_collision_test_filter(space, self->hitbox, &staticHit, filter);
 
 	//self->velocity = vector2d(1, 1);
-	Collision staticHit = gf2d_space_shape_test(space, self->hitbox);
+	Collision staticHit_b = gf2d_space_shape_test(space, self->hitbox);
 	//self->velocity = vector2d(0, 3);
-	if (staticHit.collided >= 1)
+	if (staticHit_b.collided >= 1)
 	{
 		self->velocity = vector2d(0, 0);
 		//slog("COLLISION");
 	}
+	
 	
 	if (timer < 1.0f)
 	{
@@ -103,7 +108,7 @@ void guld_update(Entity *self, Space *space, Entity *player)
 
 
 	gf2d_shape_draw(self->hitbox, gf2d_Color(0, 0, 0, 1), vector2d(0, 0));
-	self->hitbox.s.c.x = self->position.x + 20;
+	self->hitbox.s.c.x = self->position.x;
 	self->hitbox.s.c.y = self->position.y + 25;
 
 

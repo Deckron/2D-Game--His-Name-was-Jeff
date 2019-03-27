@@ -61,7 +61,8 @@ Entity *floater_new(Vector2D position)
 	entity->frame = 1;
 	entity->update = floater_update;
 	entity->hitbox = gf2d_shape_Rectangle(position.x, position.y, 27, 27);
-	gf2d_body_set(&entity->body, "entity", PLAYER_LAYER, 1, vector2d(position.x, position.y), vector2d(entity->velocity.x, entity->velocity.y), 1.0f, 0.0f, 0.0f, &entity->hitbox, NULL, floater_bodyTouch, floater_worldTouch);
+	gf2d_body_set(&entity->body, "entity", MONSTER_LAYER, 1, vector2d(position.x, position.y), vector2d(entity->velocity.x, entity->velocity.y), 1.0f, 0.0f, 0.0f, &entity->hitbox, NULL, floater_bodyTouch, floater_worldTouch);
+	//entity->enemy_update = floater_update;
 	return entity;
 }
 void floater_update(Entity *self, Space *space, Entity *player)
@@ -73,7 +74,9 @@ void floater_update(Entity *self, Space *space, Entity *player)
 	{
 		frameIncr = 0.0f;
 	}
-	
+	ClipFilter filter; filter.layer = 2; filter.team = 2;
+	Collision staticHit;
+	gf2d_space_body_collision_test_filter(space, self->hitbox, &staticHit, filter);
 	//self->velocity = vector2d(1, 1);
 	
 	if (player->position.x-self->position.x<0)//less that if creature is to the right of player

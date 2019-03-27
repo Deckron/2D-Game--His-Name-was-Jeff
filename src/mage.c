@@ -8,6 +8,7 @@
 #include "gf2d_collision.h"
 #include "gf2d_color.h"
 #include "mage.h"
+#include "projectile.h"
 
 
 
@@ -60,8 +61,9 @@ Entity *mage_new(Vector2D position)
 	entity->sprite = gf2d_sprite_load_all("images/mage.png", 64, 64, 9);
 	entity->frame = 1;
 	entity->update = mage_update;
-	entity->hitbox = gf2d_shape_Rectangle(position.x, position.y, 27, 27);
-	gf2d_body_set(&entity->body, "entity", PLAYER_LAYER, 1, vector2d(position.x, position.y), vector2d(entity->velocity.x, entity->velocity.y), 1.0f, 0.0f, 0.0f, &entity->hitbox, NULL, mage_bodyTouch, mage_worldTouch);
+	entity->hitbox = gf2d_shape_Rectangle(position.x, position.y, 27, 40);
+	gf2d_body_set(&entity->body, "entity", MONSTER_LAYER, 1, vector2d(position.x, position.y), vector2d(entity->velocity.x, entity->velocity.y), 1.0f, 0.0f, 0.0f, &entity->hitbox, NULL, mage_bodyTouch, mage_worldTouch);
+	//entity->enemy_update = mage_update;
 	return entity;
 }
 void mage_update(Entity *self, Space *space, Entity *player)
@@ -122,8 +124,9 @@ void mage_update(Entity *self, Space *space, Entity *player)
 
 	//if (keys[SDL_SCANCODE_S])self->position.y += 1;
 	vector2d_add(self->position, self->position, self->velocity);
-	
+
 }
+
 
 
 

@@ -62,7 +62,8 @@ Entity *gobl_new(Vector2D position)
 	entity->frame = 1;
 	entity->update = gobl_update;
 	entity->hitbox1 = gf2d_shape_Rectangle(position.x, position.y, 27, 27);
-	gf2d_body_set(&entity->body, "entity", PLAYER_LAYER, 1, vector2d(position.x, position.y), vector2d(entity->velocity.x, entity->velocity.y), 1.0f, 0.0f, 0.0f, &entity->hitbox, NULL, gobl_bodyTouch, gobl_worldTouch);
+	gf2d_body_set(&entity->body, "entity", MONSTER_LAYER, 1, vector2d(position.x, position.y), vector2d(entity->velocity.x, entity->velocity.y), 1.0f, 0.0f, 0.0f, &entity->hitbox, NULL, gobl_bodyTouch, gobl_worldTouch);
+	//entity->enemy_update = gobl_update;
 	return entity;
 }
 void gobl_update(Entity *self, Space *space, Entity *player)
@@ -75,15 +76,28 @@ void gobl_update(Entity *self, Space *space, Entity *player)
 	{
 		frameIncr = 0.0f;
 	}
+	ClipFilter filter; filter.layer = 2; filter.team = 2;
+	Collision staticHit;
+	gf2d_space_body_collision_test_filter(space, self->hitbox, &staticHit, filter);
 
 	//self->velocity = vector2d(1, 1);
-	Collision staticHit = gf2d_space_shape_test(space, self->hitbox1);
-	self->velocity = vector2d(0, 3);
-	if (staticHit.collided >= 1)
+	Collision staticHit_b = gf2d_space_shape_test(space, self->hitbox1);
+	//self->velocity = vector2d(0, 3);
+	if (staticHit_b.collided >= 1)
 	{
 		self->velocity = vector2d(0, 0);
 		//slog("COLLISION");
 	}
+
+
+
+
+	gf2d_shape_draw(self->hitbox1, gf2d_Color(0, 0, 0, 1), vector2d(0, 0));
+	self->hitbox1.s.c.x = self->position.x;
+	self->hitbox1.s.c.y = self->position.y + 25;
+
+
+
 	if (player->position.x - self->position.x < 0)//less that if creature is to the right of player
 	{
 		self->velocity.x = -1;
@@ -97,8 +111,8 @@ void gobl_update(Entity *self, Space *space, Entity *player)
 	
 
 	gf2d_shape_draw(self->hitbox1, gf2d_Color(0, 0, 0, 1), vector2d(0, 0));
-	self->hitbox1.s.c.x = self->position.x + 20;
-	self->hitbox1.s.c.y = self->position.y + 25;
+	self->hitbox1.s.c.x = self->position.x;
+	self->hitbox1.s.c.y = self->position.y+25;
 
 
 

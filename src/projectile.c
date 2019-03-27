@@ -56,18 +56,17 @@ Entity *projectile_new(Vector2D position)
 
 	entity->sprite = gf2d_sprite_load_all("images/Axe_You_A_Question.png", 64, 64, 1);
 	entity->frame = 1;
-	entity->projectile_update=projectile_update;
+	entity->update = projectile_update;
 	entity->hitbox = gf2d_shape_Rectangle(position.x, position.y, 10, 10);
 	gf2d_body_set(&entity->body, "entity", PLAYER_LAYER, 1, vector2d(position.x, position.y), vector2d(entity->velocity.x, entity->velocity.y), 1.0f, 0.0f, 0.0f, &entity->hitbox, NULL, projectile_bodyTouch, projectile_worldTouch);
-	
 	return entity;
 }
 void projectile_update(Entity *self, Space *space, Entity *player)
 {
 	//const Uint8 *keys;
 	timer += 0.1f;
-
-
+	
+	
 	if (player->position.x - self->position.x < 0)//less that if creature is to the right of player
 	{
 		self->velocity.x = -1;
@@ -81,13 +80,43 @@ void projectile_update(Entity *self, Space *space, Entity *player)
 	self->hitbox.s.c.x = self->position.x + 20;
 	self->hitbox.s.c.y = self->position.y + 25;
 	self->frame = (int)frameIncr;
-	Collision staticHit = gf2d_space_shape_test(space, player->hitbox);
-	if (staticHit.collided >= 1)
-	{
-		destroy_entity(self);
-	}
-	vector2d_add(self->position, self->position, self->velocity);
+	ClipFilter filter; 
+	filter.layer = 1; 
+	filter.team = 1;
+	//Collision staticHit = gf2d_space_shape_test(space, player->hitbox);
+	Collision staticHit;
+	gf2d_space_body_collision_test_filter(space, self->hitbox, &staticHit, filter);
+//		Collision bodyHit;
+	
 
+//	gf2d_space_body_collision_test_filter(space, self->hitBox, &bodyHit, filter);
+
+
+	if (timer < 1.0f)
+	{
+		return 0;
+	}
+	else if (timer >= 1.0f)
+	{
+		//projectile_new(vector2d(mage->position.x, mage->position.y), self);
+		draw_ent(self);
+	}
+	if (timer >= 2.0f)
+	{
+		timer = 0.0f;
+	}
+	
+	
+	
+	if (filter.team = 1)
+	{
+		
+		destroy_entity(self);
+		
+	}
+	
+	vector2d_add(self->position, self->position, self->velocity);
+	
 }
 
 

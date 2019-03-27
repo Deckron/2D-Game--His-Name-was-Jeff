@@ -118,13 +118,31 @@ void draw_ent(Entity *self)
 
 }
 
-void update_ent(Entity *self)
+void update_ent(Entity *self, Space *space, Entity *player)
 {
 	if ((!self) || (!self->inUse))return;
 	self->frame += 0.35;
 	if (self->frame > self->frame_limit)self->frame = 0;
 	vector2d_add(self->position, self->position, self->velocity);
-	if (self->update)self->update(self);
+	if (self->update)self->update(self,space);
+	if (self->projectile_update)self->projectile_update(self, space, player);
+	if (self->enemy_update)self->enemy_update(self, space, player);
 	//slog("updated");
 
+}
+
+void entity_update_all(Space *space, Entity *player)
+{
+	int i;
+	for (i = 0; i < entityManager.maxEntities; i++) {
+		update_ent(&entityManager.entityList[i], space, player);
+	}
+}
+
+//Draw all entities
+void entity_draw_all() {
+	int i;
+	for (i = 0; i < entityManager.maxEntities; i++) {
+		draw_ent(&entityManager.entityList[i]);
+	}
 }

@@ -23,7 +23,9 @@ typedef struct entity
 	float frame;
 	int will_to_live;
 	int frame_limit;
-	void(*update)(struct entities * entity);
+	void(*update)(struct entity * entity, Space *space);
+	void (*projectile_update)(struct entity *self, Space *space,struct entity *player);
+	void (*enemy_update)(struct entity *self, Space *space, struct entity *player);
 	
 }Entity;
 /***
@@ -53,6 +55,10 @@ void draw_ent(Entity *entity);
 /*@brief updates entity
 @param takes entity*/
 void update_ent(Entity *entity);
+
+void entity_update_all(Space *space);
+
+void entity_draw_all();
 
 
 
